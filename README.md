@@ -10,7 +10,7 @@ For [managed](https://docs.expo.dev/versions/latest/introduction/managed-vs-bare
 
 For bare React Native projects, you must ensure that you have [installed and configured the `expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before continuing.
 
-## Add the package to your npm dependencies (TODO: upload to NPM Package Registry)
+## Install the package (TODO: upload to NPM Package Registry)
 
     $ npm install expo-additive-synth
 
