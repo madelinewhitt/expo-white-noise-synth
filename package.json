@@ -1,7 +1,7 @@
 {
-  "name": "expo-tone-generator",
+  "name": "expo-tone-synth",
   "version": "0.1.1",
-  "description": "Tone Generator for Expo",
+  "description": "Tone Synth for Expo",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -16,19 +16,16 @@
   "keywords": [
     "react-native",
     "expo",
-    "tonegenerator",
-    "tone-generator"
+    "tonesynth",
+    "tone-synth"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bedrich-schindler/expo-tone-generator.git"
+    "url": "https://github.com/tmountain/expo-tone-synth"
   },
-  "author": "Bedřich Schindler <bedrich.schindler@gmail.com> (https://github.com/bedrich-schindler)",
-  "homepage": "https://github.com/bedrich-schindler/expo-tone-generator/#readme",
+  "author": "Travis Whitton",
+  "homepage": "https://github.com/tmountain/expo-tone-synth",
   "license": "MIT",
-  "dependencies": {
-    "expo-tone-generator": "^0.1.0"
-  },
   "devDependencies": {
     "expo-module-scripts": "^3.0.4",
     "expo-modules-core": "^1.1.0"
