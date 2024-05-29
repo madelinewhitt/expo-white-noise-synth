@@ -19,6 +19,29 @@ For bare React Native projects, you must ensure that you have [installed and con
 
 Run `npx pod-install` after installing the npm package.
 
+## Additive Synthesis
+
+Additive synthesis is a sound synthesis technique that creates complex sounds by combining simple sine waves. Each sine wave is referred to as a partial, and together these partials form a complex tone. The key aspects of additive synthesis in this context are:
+
+1. **Frequency Control:**
+   - The base frequency, or fundamental frequency, is the primary pitch of the tone.
+   - This frequency can be adjusted to change the overall pitch of the synthesized sound.
+
+2. **Amplitude Control:**
+   - Each partial has its own amplitude, which determines its loudness relative to the other partials.
+   - By adjusting the amplitude of each partial, you can shape the harmonic content of the sound, making it richer or more subdued.
+
+3. **ADSR Envelope:**
+   - ADSR stands for Attack, Decay, Sustain, Release.
+   - This envelope shapes the amplitude of the sound over time, though its impact is minimal for a continuous tone.
+   - In a continuous tone setup, the ADSR values can be set to minimal values to maintain a steady sound.
+
+### Components in Additive Synthesis
+
+- **Frequency Slider:** Adjusts the fundamental frequency of the tone. For example, moving the slider from 440 Hz (A4) to another value will change the pitch.
+- **Amplitude Sliders:** Control the volume of each harmonic. For instance, amplitudes set to `[1.0, 0.5, 0.25]` means the first harmonic is at full volume, the second at half volume, and the third at a quarter volume.
+- **Real-Time Updates:** Changes in frequency and amplitude are applied immediately, allowing for real-time sound manipulation.
+
 ## Usage
 
 ### Basic Example
