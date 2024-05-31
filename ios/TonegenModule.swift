@@ -1,7 +1,7 @@
 import ExpoModulesCore
 import AVFoundation
 
-public class ToneGenerator {
+public class WhiteNoiseGenerator {
     private let audioEngine = AVAudioEngine()
     private let playerNode = AVAudioPlayerNode()
     private var buffer: AVAudioPCMBuffer?
@@ -12,9 +12,9 @@ public class ToneGenerator {
         return isPlaying
     }
 
-    public func play(frequency: Double, amplitudes: [Double] = [1.0], adsr: ADSR? = nil) {
+    public func play(amplitude: Double = 1.0, adsr: ADSR? = nil) {
         guard let format = AVAudioFormat(standardFormatWithSampleRate: 11025.0, channels: 1),
-        let buffer = createBuffer(frequency: frequency, amplitudes: amplitudes, format: format, adsr: adsr) else {
+        let buffer = createBuffer(amplitude: amplitude, format: format, adsr: adsr) else {
             fatalError("Unable to create AVAudioFormat or AVAudioPCMBuffer objects")
         }
 
@@ -40,9 +40,9 @@ public class ToneGenerator {
         isPlaying = false
     }
 
-    public func setFrequency(frequency: Double, amplitudes: [Double] = [1.0], adsr: ADSR? = nil) {
+    public func setAmplitude(amplitude: Double, adsr: ADSR? = nil) {
         guard let format = buffer?.format,
-        let buffer = createBuffer(frequency: frequency, amplitudes: amplitudes, format: format, adsr: adsr) else {
+        let buffer = createBuffer(amplitude: amplitude, format: format, adsr: adsr) else {
             fatalError("Unable to create AVAudioPCMBuffer object")
         }
 
@@ -52,9 +52,9 @@ public class ToneGenerator {
         playerNode.play()
     }
 
-    private func createBuffer(frequency: Double, amplitudes: [Double], format: AVAudioFormat, adsr: ADSR? = nil) -> AVAudioPCMBuffer? {
+    private func createBuffer(amplitude: Double, format: AVAudioFormat, adsr: ADSR? = nil) -> AVAudioPCMBuffer? {
         let sampleRate = format.sampleRate
-        frameLength = AVAudioFrameCount(sampleRate / frequency)
+        frameLength = AVAudioFrameCount(sampleRate)
 
         guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameLength) else {
             return nil
@@ -65,14 +65,7 @@ public class ToneGenerator {
         }
 
         for frame in 0..<Int(frameLength) {
-            let time = Double(frame) / sampleRate
-            var sampleValue: Float32 = 0.0
-
-            for (index, amplitude) in amplitudes.enumerated() {
-                let harmonicFrequency = frequency * Double(index + 1)
-                sampleValue += Float32(amplitude * sin(2.0 * Double.pi * harmonicFrequency * time))
-            }
-
+            let sampleValue = Float32(amplitude * (Double(arc4random()) / Double(UINT32_MAX) * 2.0 - 1.0))
             floatChannelData[0][frame] = sampleValue
         }
 
@@ -153,29 +146,28 @@ public struct ADSR {
     }
 }
 
-public class ToneGeneratorModule: Module {
+public class WhiteNoiseGeneratorModule: Module {
     public func definition() -> ModuleDefinition {
-        Name("ToneGenerator")
+        Name("WhiteNoiseGenerator")
 
-        let toneGenerator = ToneGenerator()
+        let whiteNoiseGenerator = WhiteNoiseGenerator()
 
         Function("getIsPlaying") { () in
-            return toneGenerator.getIsPlaying()
+            return whiteNoiseGenerator.getIsPlaying()
         }
 
-        AsyncFunction("play") { (frequency: Double, amplitudes: [Double], adsr: [Double]) in
+        AsyncFunction("play") { (amplitude: Double, adsr: [Double]) in
             let adsrEnvelope = ADSR(attack: adsr[0], decay: adsr[1], sustain: adsr[2], release: adsr[3])
-            toneGenerator.play(frequency: frequency, amplitudes: amplitudes, adsr: adsrEnvelope)
+            whiteNoiseGenerator.play(amplitude: amplitude, adsr: adsrEnvelope)
         }
 
         AsyncFunction("stop") { () in
-            toneGenerator.stop()
+            whiteNoiseGenerator.stop()
         }
 
-        AsyncFunction("setFrequency") { (frequency: Double, amplitudes: [Double], adsr: [Double]) in
+        AsyncFunction("setAmplitude") { (amplitude: Double, adsr: [Double]) in
             let adsrEnvelope = ADSR(attack: adsr[0], decay: adsr[1], sustain: adsr[2], release: adsr[3])
-            toneGenerator.setFrequency(frequency: frequency, amplitudes: amplitudes, adsr: adsrEnvelope)
+            whiteNoiseGenerator.setAmplitude(amplitude: amplitude, adsr: adsrEnvelope)
         }
     }
 }
-
